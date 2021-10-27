@@ -10,9 +10,8 @@ Tag.init(
       type: DataTypes.INTEGER,
       model: 'tag',
       key: 'id',
-    }
   },
-  {
+
     tag_name: {
       type: DataTypes.STRING,
   }

@@ -6,7 +6,7 @@ const { Tag, Product, ProductTag } = require('../../models');
 router.get('/', (req, res) => {
   // find all tags
   // be sure to include its associated Product data
-  tag.findAll({
+  Tag.findAll({
     attributes: [
       'tag_id',
       'tag_name',
@@ -116,7 +116,7 @@ router.delete('/:id', (req, res) => {
   })
   .then(bdtagDate => {
     if (!bdtagDate) {
-    res.status(404).json({message: "No tag found with this ID!"}):
+    res.status(404).json({message: "No tag found with this ID!"});
   return;
   }
   res.json(bdtagDate);
