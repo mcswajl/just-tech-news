@@ -44,7 +44,7 @@ router.post('/', (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
-    Comment.create({
+    Product.create({
       product_name: req.body.product_name,
       price : req.body.price,
       stock: req.body.stock,
@@ -57,7 +57,7 @@ router.post('/', (req, res) => {
       if (req.body.tagIds.length) {
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
           return {
-            product_id: product.id,
+            product_name: product.product_name,
             tag_id,
           };
         });
@@ -93,7 +93,7 @@ router.put('/:id', (req, res) => {
         .filter((tag_id) => !ProductTagIds.includes(tag_id))
         .map((tag_id) => {
           return {
-            product_id: req.params.id,
+            product_name: req.params.id,
             tag_id,
           };
         });
