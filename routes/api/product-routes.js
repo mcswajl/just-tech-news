@@ -9,35 +9,13 @@ router.get('/', (req, res) => {
   // find all products
   // be sure to include its associated category and tag data
   Product.findAll({
-    attributes: [
-      'id',
-      'product_name',
-      'price',
-      'stock',
-      'category_id',
-      [Sequelize.literal('(SELECT COUNT(*) FROM product WHERE product.id = category.category_id)'), 'product_count']
-    ],
-    order: [['created_at', 'DESC']],
-    include: [
-      {
-        model: Tag,
-        attributes: ['tag_id', 'tag_name', 'created_at'],
-        include: {
-          model: ProductTag,
-          attributes: ['product_id:']
-        }
-      },
-      {
-        model: Product,
-        attributes: ['product_name:']
-      }
-    ]
-  })
-    .then(dbpostData => res.json(dbcategoryData))
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+    include: [ Category ]
+    })
+    .then(dbProductData => res.json(dbProductData))
+    .catch(err => [
+      consol.log(err),
+      res.status(500).json(err),
+    ]);
 });
 
 // get one product
@@ -47,37 +25,9 @@ router.get('/:id', (req, res) => {
   Product.findOne({
     where: {
       id: req.params.id
-    },
-    attributes: [
-      'id',
-      'product_name',
-      'price',
-      'stock',
-      'category_id',
-      [sequelize.literal('(SELECT COUNT(*) FROM category WHERE product.id = category.product_id)'), 'category_count']
-    ],
-    include: [
-      {
-        model: Product,
-        attributes: ['id', 'product_name', 'price', 'stock', 'category_id', 'created_at'],
-        include: {
-          model: Category,
-          attributes: ['category_name']
-        }
-      },
-      {
-        model: Product,
-        attributes: ['product_name']
-      }
-    ]
-  })
-    .then(dbProductData => {
-      if (!dbProductData) {
-        res.status(404).json({ message: 'No product found with this id' });
-        return;
-      }
-      res.json(dbProductData);
+    }
     })
+    .then(dbProductData => res.json(dbProductData))
     .catch(err => {
       console.log(err);
       res.status(500).json(err);

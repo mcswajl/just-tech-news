@@ -8,32 +8,13 @@ router.get('/', (req, res) => {
   // find all categories
   // be sure to include its associated Products
   Category.findAll({
-    attributes: [
-      'id',
-      'category_name',
-      [Sequelize.literal('(SELECT COUNT(*) FROM category WHERE category.id = category.category_id)'), 'category_count']
-    ],
-    order: [['created_at', 'DESC']],
-    include: [
-      {
-        model: Product,
-        attributes: ['id', 'Product_name', 'price', 'stock', 'category_name','created_at'],
-        include: {
-          model: ProductTag,
-          attributes: ['product_name:']
-        }
-      },
-      {
-        model: Category,
-        attributes: ['product_id:']
-      }
-    ]
-  })
-    .then(dbPostData => res.json(dbCategoryData))
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+    include: [ Product ]
+    })
+    .then(dbCategoryData => res.json(dbCategoryData))
+    .catch(err => [
+      consol.log(err),
+      res.status(500).json(err),
+    ]);
 });
 
 router.get('/:id', (req, res) => {
