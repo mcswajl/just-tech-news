@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { tag, product, productTag } = require('../../models');
+const { Tag, Product, ProductTag } = require('../../models');
 const Sequelize = require('../../config/connection')
 
 // The `/api/tags` endpoint
@@ -7,7 +7,7 @@ const Sequelize = require('../../config/connection')
 router.get('/', (req, res) => {
   // find all tags
   // be sure to include its associated Product data
-  tag.findAll({
+  Tag.findAll({
     attributes: [
       'tag_id',
       'tag_name',
@@ -16,15 +16,15 @@ router.get('/', (req, res) => {
     order: [['created_at', 'DESC']],
     include: [
       {
-        model: product,
+        model: Product,
         attributes: ['id', 'product_name', 'price', 'stock', 'category_id', 'created_at'],
         include: {
-          model: productTag,
+          model: ProductTag,
           attributes: ['product_id:']
         }
       },
       {
-        model: product,
+        model: Product,
         attributes: ['product_name:']
       }
     ]
@@ -39,7 +39,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
-  tag.findOne({
+  Tag.findOne({
     where: {
       id: req.params.id
     },
@@ -50,15 +50,15 @@ router.get('/:id', (req, res) => {
     ],
     include: [
       {
-        model: productTag,
+        model: ProductTag,
         attributes: ['id', 'product_id', 'created_at'],
         include: {
-          model: tag,
+          model: Tag,
           attributes: ['tag_name']
         }
       },
       {
-        model: tag,
+        model: Tag,
         attributes: ['tag_name']
       }
     ]
@@ -78,7 +78,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new tag
-  tag.create ({
+  Tag.create ({
     tag_id: req.body.tag_id,
     tad_name: req.body.taf_name,
   })
@@ -91,7 +91,7 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
-  tag.update ({
+  Tag.update ({
     tag_id: req.body.tag_id
   },
   {where: {id: req.params.id}
@@ -112,7 +112,7 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete on tag by its `id` value
-  tag.destroy ({
+  Tag.destroy ({
     where: {id: req.params.id}
   })
   .then(dbtagDate => {

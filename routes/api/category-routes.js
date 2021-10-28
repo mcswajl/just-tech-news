@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { category, product } = require('../../models');
+const { Category, Product } = require('../../models');
 const Sequelize = require('../../config/connection')
 
 // The `/api/categories` endpoint
@@ -7,7 +7,7 @@ const Sequelize = require('../../config/connection')
 router.get('/', (req, res) => {
   // find all categories
   // be sure to include its associated Products
-  category.findAll({
+  Category.findAll({
     attributes: [
       'id',
       'category_name',
@@ -16,15 +16,15 @@ router.get('/', (req, res) => {
     order: [['created_at', 'DESC']],
     include: [
       {
-        model: category,
+        model: Category,
         attributes: ['id', 'category_name','created_at'],
         include: {
-          model: product,
+          model: Product,
           attributes: ['product_name:']
         }
       },
       {
-        model: category,
+        model: Category,
         attributes: ['product_name:']
       }
     ]
@@ -39,7 +39,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
-  category.findOne({
+  Category.findOne({
     where: {
       id: req.params.id
     }
@@ -53,7 +53,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new category
-  category.create ({
+  Category.create ({
     category_id: req.body.category_id,
     category_name: req.body.category_name,
   })
@@ -66,7 +66,7 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
-  category.update ({
+  Category.update ({
   category_id: req.body.category_id
 },
 {where: {id: req.params.id}
@@ -87,7 +87,7 @@ if (!dbCategoryData) {
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
-  category.destroy ({
+  Category.destroy ({
     where: {id: req.params.id}
   })
   .then(dbCategoryDate => {
