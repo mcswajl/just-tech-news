@@ -20,11 +20,11 @@ router.get('/', (req, res) => {
     order: [['created_at', 'DESC']],
     include: [
       {
-        model: ProductTag,
-        attributes: ['id', 'product_id', 'created_at'],
+        model: Tag,
+        attributes: ['tag_id', 'tag_name', 'created_at'],
         include: {
-          model: Tag,
-          attributes: ['tag_name:']
+          model: ProductTag,
+          attributes: ['product_id:']
         }
       },
       {

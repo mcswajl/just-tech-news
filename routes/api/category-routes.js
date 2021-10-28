@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Category, Product } = require('../../models');
+const { Category, Product, ProductTag } = require('../../models');
 const Sequelize = require('../../config/connection')
 
 // The `/api/categories` endpoint
@@ -16,16 +16,16 @@ router.get('/', (req, res) => {
     order: [['created_at', 'DESC']],
     include: [
       {
-        model: Category,
-        attributes: ['id', 'category_name','created_at'],
+        model: Product,
+        attributes: ['id', 'Product_name', 'price', 'stock', 'category_name','created_at'],
         include: {
-          model: Product,
+          model: ProductTag,
           attributes: ['product_name:']
         }
       },
       {
         model: Category,
-        attributes: ['product_name:']
+        attributes: ['product_id:']
       }
     ]
   })

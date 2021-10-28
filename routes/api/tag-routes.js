@@ -24,8 +24,8 @@ router.get('/', (req, res) => {
         }
       },
       {
-        model: Product,
-        attributes: ['product_name:']
+        model: Tag,
+        attributes: ['tag_name:']
       }
     ]
   })
