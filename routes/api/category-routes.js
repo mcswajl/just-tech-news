@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Category, Product } = require('../../models');
+const { category, product } = require('../../models');
 const Sequelize = require('../../config/connection')
 
 // The `/api/categories` endpoint
@@ -7,7 +7,7 @@ const Sequelize = require('../../config/connection')
 router.get('/', (req, res) => {
   // find all categories
   // be sure to include its associated Products
-  Category.findAll({
+  category.findAll({
     attributes: [
       'id',
       'category_name',
@@ -16,15 +16,15 @@ router.get('/', (req, res) => {
     order: [['created_at', 'DESC']],
     include: [
       {
-        model: Category,
+        model: category,
         attributes: ['id', 'category_name','created_at'],
         include: {
-          model: Product,
+          model: product,
           attributes: ['product_name:']
         }
       },
       {
-        model: Category,
+        model: category,
         attributes: ['product_name:']
       }
     ]
@@ -39,7 +39,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
-  Category.findOne({
+  category.findOne({
     where: {
       id: req.params.id
     }
@@ -53,11 +53,11 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new category
-  Category.create ({
-    Category_id: req.body.category_id,
-    Category_name: req.body.category_name,
+  category.create ({
+    category_id: req.body.category_id,
+    category_name: req.body.category_name,
   })
-  .then(bdCategoryData => res.json(dbCategoryData))
+  .then(dbCategoryData => res.json(dbCategoryData))
   .catch(err => {
     console.log(err);
     res.status(500).json(err);
@@ -66,7 +66,7 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
-  Category.update ({
+  category.update ({
   category_id: req.body.category_id
 },
 {where: {id: req.params.id}
@@ -87,15 +87,15 @@ if (!dbCategoryData) {
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
-  Category.destroy ({
+  category.destroy ({
     where: {id: req.params.id}
   })
-  .then(bdCategoryDate => {
-    if (!bdCategoryDate) {
+  .then(dbCategoryDate => {
+    if (!dbCategoryDate) {
     res.status(404).json({message: "No category found with this ID!"});
   return;
   }
-  res.json(bdCategoryDate);
+  res.json(dbCategoryDate);
 })
 .catch(err => {
   console.log(err);
