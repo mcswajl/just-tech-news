@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
-const Sequelize = require('../..config/connection.js')
+const Sequelize = require('../../config/connection')
 
 // The `/api/products` endpoint
 
@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
       'price',
       'stock',
       'category_id',
-      [sequelize.literal('(SELECT COUNT(*) FROM product WHERE product.id = category.category_id)'), 'product_count']
+      [Sequelize.literal('(SELECT COUNT(*) FROM product WHERE product.id = category.category_id)'), 'product_count']
     ],
     order: [['created_at', 'DESC']],
     include: [
