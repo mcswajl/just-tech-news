@@ -49,7 +49,7 @@ router.post('/', (req, res) => {
     //   price : req.body.price,
     //   stock: req.body.stock,
     //   tagIds: req.body.tagIds,
-    })
+    // })
 
   Product.create(req.body)
     .then((Product) => {
@@ -57,7 +57,7 @@ router.post('/', (req, res) => {
       if (req.body.tagIds.length) {
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
           return {
-            product_name: product.product_name,
+            product_id: Product.product_id,
             tag_id,
           };
         });
@@ -66,11 +66,12 @@ router.post('/', (req, res) => {
       // if no product tags, just respond
       res.status(200).json(Product);
     })
-    .then((productTagIds) => res.status(200).json(ProductTagIds))
+    .then((productTagIds) => res.status(200).json(productTagIds))
     .catch((err) => {
       console.log(err);
       res.status(400).json(err);
     });
+  });
 
 
 // update product
@@ -81,9 +82,9 @@ router.put('/:id', (req, res) => {
       id: req.params.id,
     },
   })
-    .then((product) => {
+    .then((Product) => {
       // find all associated tags from productTag
-      return productTag.findAll({ where: { product_id: req.params.id } });
+      return ProductTag.findAll({ where: { product_id: req.params.id } });
     })
     .then((productTags) => {
       // get list of current tag_ids
