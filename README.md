@@ -44,7 +44,7 @@ Screenshot of my website
 ## Github repo link
 https://github.com/mcswajl/just-tech-news
 
-## My walkthrough video link
+## My walk through video link
 https://watch.screencastify.com/v/dMlzpkGctWUZTqglM1G7
 
 
